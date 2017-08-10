@@ -31,7 +31,7 @@ class Sinalizador
         //Ticker getTicker();
         Ticker tsinalizador;
         Ticker setBlink;
-        Ticker setBlink2;
+        //Ticker setBlink2;
 
 
 
@@ -48,7 +48,7 @@ Sinalizador::Sinalizador(int e)
 {
     estado = e;
     cont = 0;
-    tsinalizador.attach_ms(1000, eAtual);
+    tsinalizador.attach_ms(100, eAtual);
 
 
 }
@@ -85,17 +85,18 @@ void eAtual()
     {
       Serial.print("Entrou em 1: ");
       Serial.println(s.getCont());
-      s.setCont(6);
-      s.setBlink2.detach();
+      s.setCont(7);
+      //s.setBlink2.detach();
       s.setBlink.attach_ms(3000, blink);
 
     }
-    else if(s.getCont() == 2)
+    else if(s.getCont() == 3)
     {
       Serial.print("entrou em 2: ");
       Serial.println(s.getCont());
-      s.setBlink.detach();
-      s.setBlink2.attach_ms(2000, blink);
+      //s.setBlink.detach();
+      s.setCont(2);
+      s.setBlink.attach_ms(500, blink);
     }
 
   }
