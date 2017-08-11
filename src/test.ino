@@ -85,18 +85,18 @@ void eAtual()
     {
       Serial.print("Entrou em 1: ");
       Serial.println(s.getCont());
-      s.setCont(7);
+      s.setCont(16);
       //s.setBlink2.detach();
       s.setBlink.attach_ms(3000, blink);
 
     }
-    else if(s.getCont() == 3)
+    else if(s.getCont() == 11)
     {
       Serial.print("entrou em 2: ");
       Serial.println(s.getCont());
       //s.setBlink.detach();
-      s.setCont(2);
-      s.setBlink.attach_ms(500, blink);
+      s.setCont(10);
+      s.setBlink.attach_ms(300, blink);
     }
 
   }
