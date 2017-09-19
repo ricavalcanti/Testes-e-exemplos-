@@ -96,7 +96,7 @@ void eAtual()
       Serial.println(s.getCont());
       //s.setBlink.detach();
       s.setCont(10);
-      s.setBlink.attach_ms(300, blink);
+      s.setBlink.attach_ms(100, blink);
     }
 
   }
