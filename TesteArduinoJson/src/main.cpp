@@ -6,8 +6,18 @@ void setup() {
     // put your setup code here, to run once:
     StaticJsonBuffer<200> jsonBuffer;
     char big_json[200];
+    
+    //criar objeto 
+    /*
+    JsonObject& root = jsonBuffer.createObject();
 
-    //JsonObject& root = jsonBuffer.createObject();
+    root["sensor"] = "gps";
+    root["time"] = 1351824120;
+    root.printTo(big_json);
+    Serial.println();
+    Serial.println(big_json);*/
+
+    //Criar vetor com dois objetos
     JsonObject& hidro1 = jsonBuffer.createObject();
     hidro1["serial"] = "salarobotica";
     hidro1["pulso"] = 54;
@@ -20,9 +30,9 @@ void setup() {
     dadosJson.add(hidro1);
     dadosJson.add(hidro2);
 
-    /*dadosJson.printTo(big_json);
+    dadosJson.printTo(big_json);
     Serial.println();
-    Serial.print(big_json);*/
+    Serial.print(big_json);
 
 
 
