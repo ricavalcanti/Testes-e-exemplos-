@@ -18,6 +18,10 @@ broker = "api.saiot.ect.ufrn.br"
 r = requests.post(urlLogin, json=jsonLogin)
 token = r.text
 print(token)
+def getToken(hLog,jsonC):
+    r = requests.post(urlLogin, json=jsonC)
+    token = r.text
+
 # cadastro device
 jsonDevice = {"token":
               token,
@@ -50,6 +54,7 @@ jsonDevice = {"token":
 
 retornoCadastro = requests.post(urlCadastro, json=jsonDevice)
 print("Retorno do cadastro: " + retornoCadastro.text)
+
 
 
 def sendData(dVolume, dTemp, dCond,dateTime):
