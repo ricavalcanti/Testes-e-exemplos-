@@ -6,11 +6,24 @@ sensorAP =	{
     "type": "number",
     "class" : "ActivePower"
 }
-sensorFP =	{
+sensorFP = {
     "key": "keyfp",
     "tag": "Medidor de Fator de Potencia",
     "type": "number",
     "class" : "PowerFactor"
 }
 
-print(type(json.dumps(sensorAP)))
+jsonDevice = {"token":
+           " token",
+            "data": {
+                "name": "Teste medidor energia",
+                "serial": "serial",
+                "controllers": [],
+                "sensors": [
+                    {
+                        "oi":"oi"
+                    }
+                ]
+            }
+        }
+print(jsonDevice)

@@ -10,9 +10,11 @@ urlHist = 'http://dev.api.saiot.ect.ufrn.br/v1/device/history/logs'
 broker = "api.saiot.ect.ufrn.br"
 
 # parametros
-serial = "PYPostEle"
+serial = "240319CAS"
 email = "ricardodev@email.com"
-kCurrente = "sensorCorrente"
+kFatorPotencia = "kfp"
+kPotencia = "kpa"
+nomeDispositivo = "Medidor de potencia"
 jsonLogin = {"email": email,
              "password": "12345678910", "serial": serial}
 
@@ -30,16 +32,22 @@ def cadastraDeviceSaiot():
     jsonDevice = {"token":
                 token,
                 "data": {
-                    "name": "Teste medidor energia",
+                    "name": nomeDispositivo,
                     "serial": serial,
                     "controllers": [],
                     "sensors": [
                         {
-                            "key": kCurrente,
-                            "tag": "Medidor de corrente",
+                            "key": kPotencia,
+                            "tag": "Potencia",
                             "unit": "Kw",
                             "type": "number",
                             "class" : "ActivePower"
+                        },
+                        {
+                            "key": kFatorPotencia,
+                            "tag": "Fator de potencia",
+                            "type": "number",
+                            "class" : "PowerFactor"
                         }
                     ]
                 }
@@ -48,17 +56,21 @@ def cadastraDeviceSaiot():
     print("Retorno do cadastro: " + retornoCadastro.text)
 
 
-def sendData(dCorrente,dt):
-    x = str(datetime.datetime(dt.year, dt.month, dt.day,dt.hour,dt.minute - 3,dt.second,dt.microsecond))
+def sendData():
+    dataFP = random.randint(0,100) / 100.0
+    dataAP = random.randint(2,9)
+    dt = datetime.datetime.now()         
+    dateMinusTwoM = str(datetime.datetime(dt.year, dt.month, dt.day,dt.hour,dt.minute - 3,dt.second,dt.microsecond))
     
     jsonReport = {
         "token": token,
         "data": [{
             "data": [{
                 "serial": serial,
-                kCurrente: dCorrente
+                kFatorPotencia: dataFP,
+                kPotencia: dataAP
             }],
-            "dateTime": x
+            "dateTime": dateMinusTwoM
         }]
     }
     retornoData = requests.post(urlHist, json=jsonReport)
@@ -66,5 +78,5 @@ def sendData(dCorrente,dt):
 
 cadastraDeviceSaiot()
 while(1):
-    sendData(random.randint(4,20),datetime.datetime.now())
+    sendData()
     time.sleep(2)
