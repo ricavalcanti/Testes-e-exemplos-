@@ -10,11 +10,11 @@ urlHist = 'http://dev.api.saiot.ect.ufrn.br/v1/device/history/logs'
 broker = "api.saiot.ect.ufrn.br"
 
 # parametros
-serial = "240319CAS"
+serial = "240319CAS2"
 email = "ricardodev@email.com"
 kFatorPotencia = "kfp"
 kPotencia = "kpa"
-nomeDispositivo = "Medidor de potencia"
+nomeDispositivo = "Medidor de potencia2"
 jsonLogin = {"email": email,
              "password": "12345678910", "serial": serial}
 
@@ -57,7 +57,7 @@ def cadastraDeviceSaiot():
 
 
 def sendData():
-    dataFP = random.randint(94,98) / 100.0
+    dataFP = random.randint(75,90) / 100.0
     dataAP = random.randint(2,9)
     dt = datetime.datetime.now()         
     dateMinusTwoM = str(datetime.datetime(dt.year, dt.month, dt.day,dt.hour,dt.minute - 3,dt.second,dt.microsecond))

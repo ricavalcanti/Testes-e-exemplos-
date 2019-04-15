@@ -1,13 +1,26 @@
 import requests
 import json
 import time
+import random
+import datetime
+def sendData(dVolume,dateTime):
+    jsonReport = {
+        "token": token,
+        "data": [{
+            "data": [{
+                "serial": serial,
+                kVol: dVolume,
+            }],
+            "dateTime": dateTime
+        }]
+    }
+    retornoData = requests.post(urlHist, json=jsonReport)
+    print(retornoData.text)
 
 # parametros
-serial = "TEST02271018"
-email = "rodolfo@email.com"
+serial = "150419Lab"
+email = "ricardo@email.com"
 kVol = "sensorVolume1"
-kCond = "sensorCond1"
-kTemp = "sensorTemp1"
 jsonLogin = {"email": email,
              "password": "12345678910", "serial": serial}
 urlLogin = 'http://api.saiot.ect.ufrn.br/v1/device/auth/login'
@@ -22,7 +35,7 @@ print(token)
 jsonDevice = {"token":
               token,
               "data": {
-                  "name": "SmartOrdenha",
+                  "name": "TesteMQTTPython",
                   "serial": serial,
                   "controllers": [],
                   "sensors": [
@@ -32,18 +45,6 @@ jsonDevice = {"token":
                           "unit": "Litros",
                           "type": "number"
                       },
-                      {
-                          "key": kCond,
-                          "tag": "Condutância",
-                          "unit": "miliSiemens/cm",
-                          "type": "number"
-                      },
-                      {
-                          "key": kTemp,
-                          "tag": "Temperatura",
-                          "unit": "°C",
-                          "type": "number"
-                      }
                   ]
               }
               }
@@ -51,21 +52,6 @@ jsonDevice = {"token":
 retornoCadastro = requests.post(urlCadastro, json=jsonDevice)
 print("Retorno do cadastro: " + retornoCadastro.text)
 
-
-def sendData(dVolume, dTemp, dCond,dateTime):
-    jsonReport = {
-        "token": token,
-        "data": [{
-            "data": [{
-                "serial": serial,
-                kVol: dVolume,
-                kCond : dCond,
-                kTemp: dTemp
-            }],
-            "dateTime": dateTime
-        }]
-    }
-    retornoData = requests.post(urlHist, json=jsonReport)
-    print(retornoData.text)
-
-sendData(20,28,5.3,"2018-10-26 09:51:52.220")
+while(1):
+    sendData(random.randint(1,20),str(datetime.datetime.now()))
+    time.sleep(2)
