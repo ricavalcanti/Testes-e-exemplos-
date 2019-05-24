@@ -1,0 +1,3 @@
+[submodule "iotDeviceOnSaiot/lib/SaiotDevice"]
+	path = iotDeviceOnSaiot/lib/SaiotDevice
+	url = https://github.com/daniellycosta/SaiotDevice.git
