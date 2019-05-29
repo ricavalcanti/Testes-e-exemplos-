@@ -3,36 +3,31 @@ import json
 import time
 import random
 import datetime
-def sendData(dVolume,dateTime):
+import paho.mqtt.client as mqtt
+
+def sendData(dVolume):
     jsonReport = {
         "token": token,
-        "data": [{
-            "data": [{
-                "serial": serial,
-                kVol: dVolume,
-            }],
-            "dateTime": dateTime
-        }]
+        "data": {
+            "serial": serial,
+            "key":kVol,
+            "value": dVolume,
+        }
     }
-    retornoData = requests.post(urlHist, json=jsonReport)
-    print(retornoData.text)
+    print(client.publish(rotaPSensor,json.dumps(jsonReport)))
+    print(jsonReport)
 
-# parametros
-serial = "150419Lab"
-email = "ricardo@email.com"
-kVol = "sensorVolume1"
-jsonLogin = {"email": email,
-             "password": "12345678910", "serial": serial}
-urlLogin = 'http://api.saiot.ect.ufrn.br/v1/device/auth/login'
-urlCadastro = 'http://api.saiot.ect.ufrn.br/v1/device/manager/device'
-urlHist = 'http://api.saiot.ect.ufrn.br/v1/device/history/logs'
-broker = "api.saiot.ect.ufrn.br"
-# pickup token
-r = requests.post(urlLogin, json=jsonLogin)
-token = r.text
-print(token)
-# cadastro device
-jsonDevice = {"token":
+def on_connect(client, userdata, flags, rc):
+    print("Connection returned result: "+connack_string(rc))
+
+def getToken_saiot():
+    r = requests.post(urlLogin, json=jsonLogin)
+    token = r.text
+    print(token)
+    return token
+
+def formatJsonCadastro(token):
+    jsonDevice = {"token":
               token,
               "data": {
                   "name": "TesteMQTTPython",
@@ -48,10 +43,38 @@ jsonDevice = {"token":
                   ]
               }
               }
+    return jsonDevice
 
-retornoCadastro = requests.post(urlCadastro, json=jsonDevice)
-print("Retorno do cadastro: " + retornoCadastro.text)
+def begin_saiot(token):
+    client.username_pw_set(email,token)
+    time.sleep(2)
+    print(client.connect(broker, port=port))
+    time.sleep(2)
+    jsonCadastro = formatJsonCadastro(token)
+    print(client.publish(rotaCadastro,json.dumps(jsonCadastro)))
+
+# parametros dispositivo
+serial = "150419Lab1NEW"
+email = "ricardo@email.com"
+kVol = "sensorVolume1"
+jsonLogin = {"email": email,
+             "password": "12345678910", "serial": serial}
+urlLogin = 'http://api.saiot.ect.ufrn.br/v1/device/auth/login'
+urlCadastro = 'http://api.saiot.ect.ufrn.br/v1/device/manager/device'
+
+#rotas servidor
+rotaCadastro = '/manager/post/device/'
+rotaPSensor = '/history/post/logs/sensor/'
+broker = "api.saiot.ect.ufrn.br"
+port = 8000
+
+client = mqtt.Client(serial)
+client.on_connect = on_connect
+token = getToken_saiot()
+begin_saiot(token)
 
 while(1):
-    sendData(random.randint(1,20),str(datetime.datetime.now()))
+    sendData(random.randint(1,20))
+    client.loop(timeout=1.0, max_packets=1)
     time.sleep(2)
+
