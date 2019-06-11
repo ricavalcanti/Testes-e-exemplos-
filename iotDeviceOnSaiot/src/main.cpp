@@ -15,7 +15,7 @@
 #define timeToSend 15
 
 WiFiClient espClient;
-SaIoTDeviceLib hidrometro("DeviceTeste", "240519LAB", "ricardo@email.com"); //name,serial,email
+SaIoTDeviceLib hidrometro("DeviceTeste", "110519LAB", "ricardo@email.com"); //name,serial,email
 SaIoTController solenoide("on/off", "v.Solenoide", "onoff");                //key,tag,class
 SaIoTSensor medidorAgua("hd01", "hidrometro_01", "Litros", "number");       //key,tag,unit,type
 String senha = "12345678910";
@@ -41,7 +41,8 @@ void loop()
 {
   if ((((millis() - tDecorrido) / 1000) >= timeToSend) && stateSolenoide)
   {
-    medidorAgua.sendData(random(1, 30), SaIoTCom::getDateNow());
+    Serial.println("Enviar");
+    medidorAgua.sendData(random(1, 30));
     tDecorrido = millis();
   }
   hidrometro.handleLoop();
