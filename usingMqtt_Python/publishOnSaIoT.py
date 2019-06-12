@@ -55,17 +55,17 @@ def begin_saiot(token):
 
 # parametros dispositivo
 serial = "150419Lab1NEW"
-email = "ricardo@email.com"
+email = "ricjose2005@hotmail.com"
 kVol = "sensorVolume1"
 jsonLogin = {"email": email,
-             "password": "12345678910", "serial": serial}
-urlLogin = 'http://api.saiot.ect.ufrn.br/v1/device/auth/login'
-urlCadastro = 'http://api.saiot.ect.ufrn.br/v1/device/manager/device'
+             "password": "12345678910a", "serial": serial}
+urlLogin = 'http://api.saiot.com.br/v1/device/auth/login'
+urlCadastro = 'http://api.saiot.com.br/v1/device/manager/device'
 
 #rotas servidor
 rotaCadastro = '/manager/post/device/'
 rotaPSensor = '/history/post/logs/sensor/'
-broker = "api.saiot.ect.ufrn.br"
+broker = "api.saiot.com.br"
 port = 8000
 
 client = mqtt.Client(serial)
