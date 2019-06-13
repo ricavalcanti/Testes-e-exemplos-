@@ -12,7 +12,9 @@
 
 #include <Arduino.h>
 #include <SaIoTDeviceLib.h>
-#define timeToSend 15
+#include <Ticker.h>
+#define timeToSend 60 //4pck
+#define timeToCollect 15
 
 WiFiClient espClient;
 SaIoTDeviceLib hidrometro("DeviceTeste", "110519LAB", "ricardo@email.com"); //name,serial,email
@@ -22,27 +24,39 @@ String senha = "12345678910";
 void callback(char *topic, byte *payload, unsigned int length);
 
 volatile bool stateSolenoide;
+volatile int value = 0;
 
 unsigned long tDecorrido;
 String getHoraAtual();
+
+// Ticker collectData;
+Ticker sendData;
+
+void collect();
+void send();
 void setup()
 {
+
   hidrometro.addController(solenoide);
   hidrometro.addSensor(medidorAgua);
+  // medidorAgua.setPackages(5);
   Serial.begin(115200);
   Serial.println("INICIO");
+  // collectData.attach(timeToCollect, collect);
   hidrometro.preSetCom(espClient, callback, 300);
   hidrometro.start(senha);
+  sendData.attach(timeToSend, send);
 
   tDecorrido = millis();
 }
 
 void loop()
 {
-  if ((((millis() - tDecorrido) / 1000) >= timeToSend) && stateSolenoide)
+  if ((((millis() - tDecorrido) / 1000) >= timeToCollect) && stateSolenoide)
   {
-    Serial.println("Enviar");
-    medidorAgua.sendData(random(1, 30));
+    Serial.print("Coletando dados: ");
+    Serial.println(value);
+    medidorAgua.pushOnQueue(value++, SaIoTCom::getDateNow());
     tDecorrido = millis();
   }
   hidrometro.handleLoop();
@@ -67,4 +81,16 @@ void callback(char *topic, byte *payload, unsigned int length)
     stateSolenoide = payloadS.toInt();
     //
   }
+}
+
+// void ICACHE_RAM_ATTR collect()
+// {
+//   Serial.println("Coletando dados");
+//   medidorAgua.pushOnQueue(random(1, 30), SaIoTCom::getDateNow());
+// }
+
+void send()
+{
+  Serial.println("Enviando");
+  hidrometro.sendData(medidorAgua, 4);
 }
