@@ -1,0 +1,42 @@
+Para compilar (onde "teste" é o nome do arquivo): gcc -fopenmp test.c -lm -o saida
+Para executar: ./saida 
+
+Ref: http://www.inf.ufsc.br/~bosco.sobral/ensino/ine5645/Conceitos_OpenMP.pdf
+Comandos utilizados:
+
+~if(expr) - Cláusula que significa executar em paralelo se a expressão expr for avaliada como
+verdade. Caso contrário, a execução é sequencial (apenas a master thread).
+
+~num_threads(expr) - Executa em paralelo com um número de threads igual ao resultado da
+avaliação da expressão expr.
+
+~private(list) - Cláusula que define que as variáveis definidas em list são duplicadas em cada
+thread e o seu acesso passa a ser local (privado) em cada thread. O valor inicial das variáveis
+privadas é indefinido (não é iniciado) e o valor final das variáveis originais (depois da região
+paralela) também é indefinido.
+
+~shared(list) – Cláusula que define sobre as variáveis definidas em list são partilhadas por todos
+os threads ficando à responsabilidade do programador garantir o seu correto manuseamento.
+Por omissão, as variáveis para as quais não é definido qualquer tipo são consideradas variáveis
+partilhadas.
+
+~default(none) - Cláusula que define que o tipo de todas as variáveis envolvidas na região
+paralela deve ser declarado explicitamente (sobrepõe-se à definição de que, por omissão, as
+variáveis são consideradas partilhadas).
+
+~omp_get_thread_num() – Função básica do OpenMP que retorna o identificador do
+thread corrente. Os N threads a executar numa região paralela são numerados de 0 a N-1 e o
+master thread é sempre identificado pelo número 0.
+
+~omp_get_num_threads() - Função básica do OpenMP que retorna o número de threads
+momentaneamente ativos. Se for chamada a partir duma região sequencial (executada apenas
+pelo master thread) retorna 1.
+
+~Redução
+    Cláusula: reduction(op : list);
+    usada para operações tipo “all-to-one”:
+    - exemplo: op = ’+’
+    - cada thread terá uma cópia da(s) variável(is) definidas em ’list’ com a devida
+    inicialização;
+    - ela efetuará a soma local com sua cópia;
+    - ao sair da seção paralela, as somas locais serão automaticamente adicionadas na variável
